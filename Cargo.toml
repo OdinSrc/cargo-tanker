@@ -6,6 +6,9 @@ authors = ["OdinSrc"]
 repository = "https://github.com/OdinSrc/cargo-tanker.git"
 keywords = ["project", "npx", "create project", "folder structure"]
 categories = ["command-line-utilities", "development-tools::cargo-plugins"]
+readme = "README.md"
+license = "LICENSE.txt"
+description = "Crate to create great project structure for Rust"
 
 
 [[bin]]
