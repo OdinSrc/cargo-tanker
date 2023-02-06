@@ -1,31 +1,37 @@
-use clap::Parser;
 use actions::{rest_api::RestApiAction, ActionTrait};
-
+use clap::Arg;
 mod actions;
 
-
-#[derive(clap::Subcommand, Debug)]
-enum Action {
-   RestApi
-}
-
-#[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
-struct Args{
-    // Action
-    #[command(subcommand)]
-    action: Action,
-}
+ 
 
 fn main(){
-    let args = Args::parse();
+
+    let cmd = clap::Command::new("cargo")
+        .bin_name("cargo")
+        .subcommand_required(true)
+        .subcommand(
+            clap::command!("tanker").arg(
+                Arg::new("action")
+            ),
+        );
+    let matches = cmd.get_matches();
+    
+    let matches = match matches.subcommand() {
+        Some(("tanker", matches)) => matches,
+        _ => unreachable!("clap should ensure we don't get here"),
+    };
+
+
+    let action = match matches.get_one::<String>("action") {
+        Some(action) => action,
+        _ => panic!("Invalid action")
+    };
 
     let target_folder = "./src".to_owned();
-    match &args.action{
-        Action::RestApi => {
-            let action = RestApiAction::new(target_folder);
-            action.create_folder();
-        },
-        
+
+    if action == "rest-api"{
+        let action = RestApiAction::new(target_folder);
+        action.create_folder();
     }
+    
 }
